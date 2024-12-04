@@ -2,3 +2,5 @@ DragDrop/build/
 DragDrop/CMakeLists.txt.user
 StandardDialog/build/
 StandardDialog/CMakeLists.txt.user
+CustomDialog/build/
+CustomDialog/CMakeLists.txt.user

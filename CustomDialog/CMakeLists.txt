@@ -23,6 +23,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(CustomDialog
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        tdialogsize.h tdialogsize.cpp tdialogsize.ui
+        tdialogheaders.h tdialogheaders.cpp tdialogheaders.ui
+        tdialoglocate.h tdialoglocate.cpp tdialoglocate.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET CustomDialog APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
