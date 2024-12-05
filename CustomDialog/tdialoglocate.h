@@ -16,8 +16,8 @@ public:
     void setSpinRange(int rowCount, int colCount);
 
 protected:
-    void closeEvent();
-    void showEvent();
+    void closeEvent(QEvent *event);
+    void showEvent(QEvent *event);
 
 private:
     Ui::TDialogLocate *ui;
@@ -28,6 +28,8 @@ public slots:
 signals:
     void changeCellText(int row, int column, QString &text);
     void changeActionEnable(bool en);
+private slots:
+    void on_pushButtonSet_clicked();
 };
 
 #endif // TDIALOGLOCATE_H

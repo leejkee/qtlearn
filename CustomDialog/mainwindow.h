@@ -35,10 +35,17 @@ private slots:
 
     void on_actionLocate_cell_triggered();
 
+    void on_tableView_clicked(const QModelIndex &index);
+
 public slots:
     void do_setCellText(int row, int column, QString &text);
 
 signals:
+    /**
+     * @brief cellIndexChanged() [Signal] Emits when the cell(rowNo, colNo) on the tableview is clicked.
+     * @param rowNo
+     * @param colNo
+     */
     void cellIndexChanged(int rowNo, int colNo);
 
 protected:

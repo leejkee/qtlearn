@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QStandardItemModel>
 #include "./ui_mainwindow.h"
+#include "tdialoglocate.h"
 #include "tdialogsize.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -15,14 +16,17 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    /// init the table
     this->m_model = new QStandardItemModel(m_tableRowCount, m_tableColumnCount, this);
     m_model->setColumnCount(m_tableColumnCount);
     m_model->setRowCount(m_tableRowCount);
-    m_selection = new QItemSelectionModel(m_model);
     const QStringList listHeader{"Name", "Sex", "Degree", "Department"};
     m_model->setHorizontalHeaderLabels(listHeader);
-    ui->tableView->setSelectionModel(m_selection);
     ui->tableView->setModel(this->m_model);
+
+    m_selection = new QItemSelectionModel(m_model);
+    ui->tableView->setSelectionModel(m_selection);
 
     m_labCellPositon = new QLabel("Current Cell:", this);
     m_labCellPositon->setMinimumWidth(180);
@@ -32,6 +36,12 @@ MainWindow::MainWindow(QWidget *parent)
     m_labCellText = new QLabel("Cell:", this);
     m_labCellText->setMinimumWidth(200);
     ui->statusBar->addWidget(m_labCellText);
+    connect(m_selection,
+            &QItemSelectionModel::currentChanged,
+            this,
+            &MainWindow::do_model_currentChanged);
+
+    connect(ui->actionExit, &QAction::triggered, this, &MainWindow::close);
 }
 
 MainWindow::~MainWindow()
@@ -49,10 +59,10 @@ void MainWindow::do_model_currentChanged(const QModelIndex &current, const QMode
     Q_UNUSED(&previous);
     if (current.isValid()) {
         m_labCellPositon->setText(
-            QString::asprintf("Current Cell : %d row, %d column", current.row(), current.column()));
+            QString::asprintf("Current Cell: %d R, %d C ", current.row(), current.column()));
         QStandardItem *aItem;
         aItem = m_model->itemFromIndex(current);
-        this->m_labCellText->setText("Cell : " + aItem->text());
+        this->m_labCellText->setText("Cell text: " + aItem->text());
     }
 }
 
@@ -93,9 +103,38 @@ void MainWindow::on_actionSet_header_triggered()
     }
 }
 
-void MainWindow::on_actionLocate_cell_triggered() {}
+void MainWindow::on_actionLocate_cell_triggered()
+{
+    TDialogLocate *dlgLocate = new TDialogLocate(this);
+    dlgLocate->setAttribute(Qt::WA_DeleteOnClose);
+    /// StayOnTop
+    dlgLocate->setWindowFlag(Qt::WindowStaysOnTopHint);
+    dlgLocate->setSpinRange(m_model->rowCount(), m_model->columnCount());
 
-void MainWindow::do_setCellText(int row, int column, QString &text) {}
+    QModelIndex indexCur = m_selection->currentIndex();
+    if (indexCur.isValid()) {
+        dlgLocate->setSpinValue(indexCur.row(), indexCur.column());
+    }
+
+    connect(dlgLocate,
+            &TDialogLocate::changeActionEnable,
+            ui->actionLocate_cell,
+            &QAction::enabledChanged);
+
+    connect(dlgLocate, &TDialogLocate::changeCellText, this, &MainWindow::do_setCellText);
+
+    connect(this, &MainWindow::cellIndexChanged, dlgLocate, &TDialogLocate::setSpinValue);
+    dlgLocate->setModal(false);
+    dlgLocate->show();
+}
+
+void MainWindow::do_setCellText(int row, int column, QString &text)
+{
+    QModelIndex index = m_model->index(row, column);
+    m_selection->clearSelection();
+    m_selection->setCurrentIndex(index, QItemSelectionModel::Select);
+    m_model->setData(index, text, Qt::DisplayRole);
+}
 
 /**
  * @brief MainWindow::closeEvent()  Runs when the window is closed.
@@ -110,4 +149,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     } else {
         event->ignore();
     }
+}
+
+void MainWindow::on_tableView_clicked(const QModelIndex &index)
+{
+    emit cellIndexChanged(index.row(), index.column());
 }
