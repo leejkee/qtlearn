@@ -4,3 +4,5 @@ StandardDialog/build/
 StandardDialog/CMakeLists.txt.user
 CustomDialog/build/
 CustomDialog/CMakeLists.txt.user
+MutiWindow/build/
+MutiWindow/CMakeLists.txt.user
