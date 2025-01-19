@@ -61,7 +61,14 @@ TFormTable::TFormTable(QWidget *parent)
     this->setCentralWidget(tableView);
 
     connect(this->actionExit, &QAction::triggered, this, &TFormTable::close);
-    connect(this->actionTableCellSize, &QAction::triggered, )
+    connect(this->actionTableCellSize,
+            &QAction::triggered,
+            this,
+            &TFormTable::onActionTableCellSize);
+    connect(this->actionTableHeaderSetting,
+            &QAction::triggered,
+            this,
+            &TFormTable::onActionTableHeaderSetting);
 }
 
 ///
