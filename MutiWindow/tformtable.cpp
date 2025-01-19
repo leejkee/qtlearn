@@ -65,6 +65,7 @@ TFormTable::TFormTable(QWidget *parent)
             &QAction::triggered,
             this,
             &TFormTable::onActionTableCellSize);
+
     connect(this->actionTableHeaderSetting,
             &QAction::triggered,
             this,

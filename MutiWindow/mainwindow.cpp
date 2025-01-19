@@ -92,3 +92,15 @@ void MainWindow::on_actionSeparateMainWindow_triggered()
     formTable->statusBar();
     formTable->show();
 }
+
+///
+/// @brief MainWindow::on_tabWidget_currentChanged
+/// If the tab container has no pages, display the background.
+/// @param index unused
+///
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    Q_UNUSED(index);
+    bool enable = (ui->tabWidget->count() > 0);
+    ui->tabWidget->setVisible(enable);
+}

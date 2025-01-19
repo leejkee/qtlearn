@@ -31,6 +31,8 @@ private slots:
 
     void on_actionSeparateMainWindow_triggered();
 
+    void on_tabWidget_currentChanged(int index);
+
 private:
     Ui::MainWindow *ui;
 };
