@@ -17,20 +17,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-protected:
-    void paintEvent(QPaintEvent *e);
-
-private slots:
-    void do_changeTabTitle(QString title);
-
-    void on_actionEmbeddedWigget_triggered();
-
-    void on_actionSeparateWidget_triggered();
-
-    void on_actionEmbeddedMainWIndow_triggered();
-
-    void on_actionSeparateMainWindow_triggered();
-
 private:
     Ui::MainWindow *ui;
 };

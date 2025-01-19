@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>icon/EmbeddedWidget.png</file>
+        <file>icon/EmbeddedMainWindow.png</file>
+        <file>icon/SeparateWidget.png</file>
+        <file>icon/SeparateWindow.png</file>
+        <file>icon/file-open.png</file>
+        <file>icon/close.png</file>
+        <file>icon/copy.png</file>
+        <file>icon/cut.png</file>
+        <file>icon/font.png</file>
+        <file>icon/paste.png</file>
+        <file>icon/redo.png</file>
+        <file>icon/undo.png</file>
+        <file>icon/table.png</file>
+        <file>icon/table_header.png</file>
+        <file>icon/exit.png</file>
+    </qresource>
+    <qresource prefix="/background">
+        <file>icon/DarkSouls.png</file>
+    </qresource>
+</RCC>
