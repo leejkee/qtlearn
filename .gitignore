@@ -1,11 +1,15 @@
-DragDrop/build/
-DragDrop/CMakeLists.txt.user
-StandardDialog/build/
-StandardDialog/CMakeLists.txt.user
-CustomDialog/build/
-CustomDialog/CMakeLists.txt.user
-MutiWindow/build/
-MutiWindow/uml/*.drawio
-MutiWindow/uml/*.bkp
-MutiWindow/CMakeLists.txt.user
+*/build/
+*/CMakeLists.txt.user
+*/uml/*.drawio
+*/uml/*.bkp
+# DragDrop/build/
+# DragDrop/CMakeLists.txt.user
+# StandardDialog/build/
+# StandardDialog/CMakeLists.txt.user
+# CustomDialog/build/
+# CustomDialog/CMakeLists.txt.user
+# MutiWindow/build/
+# MutiWindow/uml/*.drawio
+# MutiWindow/uml/*.bkp
+# MutiWindow/CMakeLists.txt.user
 test/
