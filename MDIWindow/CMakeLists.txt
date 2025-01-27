@@ -2,9 +2,6 @@ cmake_minimum_required(VERSION 3.16)
 
 project(MDIWindow VERSION 0.1 LANGUAGES CXX)
 
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -14,14 +11,19 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 file(GLOB_RECURSE PROJECT_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.ui"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.ui"
     "${CMAKE_CURRENT_SOURCE_DIR}/resource/*.qrc"
 )
 
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 # message(STATUS "Variable name CMAKE_CURRENT_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
-# message(STATUS "Variable name PJT_SOURECS: ${PROJECT_SOURCES}")
+message(STATUS "Variable name PJT_SOURECS: ${PROJECT_SOURCES}")
 
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(MDIWindow
         MANUAL_FINALIZATION
