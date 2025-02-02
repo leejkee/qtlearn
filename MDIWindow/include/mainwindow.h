@@ -19,5 +19,19 @@ public:
 
 private:
     Ui::MainWindow *ui;
+private slots:
+    void onActionNew();
+    void onActionOpen();
+    void onActionSave();
+    void onActionCloseAll();
+    void onActionCut();
+    void onActionCopy();
+    void onActionPaste();
+    void onActionFontSettings();
+    void onActionMDIMode(bool);
+    void onActionCasadingMode();
+    void onActionTileMode();
+    void onActionQuit();
+
 };
 #endif // MAINWINDOW_H

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+
 class QPlainTextEdit;
 class TFormDoc : public QWidget
 {
@@ -24,8 +25,6 @@ public:
     void textCut();
     void textCopy();
     void textPaste();
-
-signals:
 };
 
 #endif // TFORMDOC_H

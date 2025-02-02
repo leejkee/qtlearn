@@ -2,6 +2,9 @@
 #include <QFontDialog>
 #include <QPlainTextEdit>
 #include <QVBoxLayout>
+#include <QFile>
+#include <QTextStream>
+#include <QFileInfo>
 
 TFormDoc::TFormDoc(QWidget *parent)
     : QWidget{parent}
@@ -20,18 +23,34 @@ TFormDoc::TFormDoc(QWidget *parent)
             &QWidget::setWindowModified);
 }
 
-void TFormDoc::loadFormFile(QString &fileName) {}
+void TFormDoc::loadFormFile(QString &fileName) {
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        this->plainTextEdit->clear();
+        this->plainTextEdit->setPlainText(stream.readAll());
+        file.close();
 
-void TFormDoc::saveToFile() {}
+        this->m_fileName = fileName;
+        QFileInfo fileInfo(fileName);
+        QString baseName = fileInfo.fileName();
+        this->setWindowTitle(baseName + "[*]");
+        this->m_fileOpened = true;
+    }
+}
+
+void TFormDoc::saveToFile() {
+    this->setWindowModified(false);
+}
 
 QString TFormDoc::currentFileName()
 {
-    return QString("adab");
+    return this->m_fileName;
 }
 
 bool TFormDoc::isFileOpened()
 {
-    return true;
+    return this->m_fileOpened;
 }
 
 void TFormDoc::setEditFont()
