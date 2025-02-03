@@ -9,6 +9,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , m_activeSubWindow(nullptr)
 {
     ui->setupUi(this);
     ui->mdiArea->setTabsClosable(true);
@@ -16,6 +17,13 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(ui->mdiArea);
     setWindowState(Qt::WindowMaximized);
     this->setWindowTitle(QCoreApplication::translate("MainWindow", "MDI Application", nullptr));
+
+    ui->actionCopy->setEnabled(false);
+    ui->actionCut->setEnabled(false);
+    ui->actionPaste->setEnabled(false);
+    ui->actionSave->setEnabled(false);
+    ui->actionFontSettings->setEnabled(false);
+
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onActionNew);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onActionOpen);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::onActionSave);
@@ -44,6 +52,7 @@ void MainWindow::onActionNew()
     ui->actionCut->setEnabled(true);
     ui->actionPaste->setEnabled(true);
     ui->actionSave->setEnabled(true);
+    ui->actionFontSettings->setEnabled(true);
     doc->setAttribute(Qt::WA_DeleteOnClose);
 }
 void MainWindow::onActionOpen()
@@ -51,7 +60,7 @@ void MainWindow::onActionOpen()
     /**
      * @brief Check if a new window is needed 
      */
-    bool newWindowNeeded = true;
+    bool newWindowNeeded = false;
     TFormDoc *doc;
     if (ui->mdiArea->subWindowList().size() > 0) {
         doc = (TFormDoc *)ui->mdiArea->activeSubWindow()->widget();
@@ -135,3 +144,28 @@ void MainWindow::onActionQuit()
     // Close the application
     qApp->quit();
 }
+
+void MainWindow::on_mdiArea_subWindowActivated(QMdiSubWindow *arg1) {
+    if (ui->mdiArea->subWindowList().size() == 0) {
+        ui->actionCopy->setEnabled(false);
+        ui->actionCut->setEnabled(false);
+        ui->actionPaste->setEnabled(false);
+        ui->actionSave->setEnabled(false);
+        ui->actionFontSettings->setEnabled(false);
+        ui->statusbar->clearMessage();
+    }
+    else {
+        TFormDoc *doc = static_cast<TFormDoc *>(arg1->widget());
+        ui->statusbar->showMessage(doc->currentFileName());
+
+        // Set the active subwindow
+        if (m_activeSubWindow != nullptr) {
+            m_activeSubWindow->setStyleSheet(defaultStyle);
+        }
+        if (arg1 != nullptr) {
+            arg1->setStyleSheet(activeStyle);
+        }
+        m_activeSubWindow = arg1;
+    }
+}
+

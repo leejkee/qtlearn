@@ -17,8 +17,8 @@
    <widget class="QMdiArea" name="mdiArea">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>180</y>
+      <x>135</x>
+      <y>150</y>
       <width>391</width>
       <height>181</height>
      </rect>

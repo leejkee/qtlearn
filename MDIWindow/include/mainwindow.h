@@ -8,7 +8,7 @@ namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
-
+class QMdiSubWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -19,6 +19,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QMdiSubWindow *m_activeSubWindow;
+    const QString defaultStyle = "border: none;";
+    const QString activeStyle = "border: 3px solid red;";
+
 private slots:
     void onActionNew();
     void onActionOpen();
@@ -33,5 +37,6 @@ private slots:
     void onActionTileMode();
     void onActionQuit();
 
+    void on_mdiArea_subWindowActivated(QMdiSubWindow *arg1);
 };
 #endif // MAINWINDOW_H

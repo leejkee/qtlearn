@@ -5,16 +5,20 @@
 #include <QFile>
 #include <QTextStream>
 #include <QFileInfo>
+#include <QStatusBar>
 
 TFormDoc::TFormDoc(QWidget *parent)
     : QWidget{parent}
 {
     this->setWindowTitle("New Doc[*]");
     this->setAttribute(Qt::WA_DeleteOnClose);
-    plainTextEdit = new QPlainTextEdit(this);
 
+    // set up UI
+    plainTextEdit = new QPlainTextEdit(this);
+    // statusBar = new QStatusBar(this);
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(plainTextEdit);
+    // layout->addWidget(statusBar);
     setLayout(layout);
 
     connect(this->plainTextEdit,
@@ -25,7 +29,7 @@ TFormDoc::TFormDoc(QWidget *parent)
 
 void TFormDoc::loadFormFile(QString &fileName) {
     QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream stream(&file);
         this->plainTextEdit->clear();
         this->plainTextEdit->setPlainText(stream.readAll());

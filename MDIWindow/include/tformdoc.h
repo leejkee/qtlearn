@@ -3,8 +3,8 @@
 
 #include <QWidget>
 
-
 class QPlainTextEdit;
+class QStatusBar;
 class TFormDoc : public QWidget
 {
     Q_OBJECT
@@ -15,6 +15,8 @@ private:
     QString m_fileName;
     bool m_fileOpened = false;
     QPlainTextEdit *plainTextEdit;
+    // QStatusBar *statusBar;
+
 
 public:
     void loadFormFile(QString &fileName);
