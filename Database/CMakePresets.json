@@ -1,0 +1,32 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 16,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "vscode",
+            "generator": "Ninja",
+            "binaryDir": "c:/Users/cww/Documents/Workspace/qtLearn/qtlearn/Database/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_PREFIX_PATH": "C:/Qt/6.8.0/mingw_64",
+                "CMAKE_CXX_COMPILER": "C:/Qt/Tools/mingw1310_64/bin/g++.exe",
+                "CMAKE_C_COMPILER": "C:/Qt/Tools/mingw1310_64/bin/gcc.exe"
+            },
+            "environment": {
+                "PATH": "C:/Qt/6.8.0/mingw_64/bin;C:/Program Files/SQLite/lib"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "vscode-Debug",
+            "configurePreset": "vscode",
+            "description": "Build the project with Ninja in Debug mode",
+            "configuration": "Debug"
+        }
+    ]
+}
