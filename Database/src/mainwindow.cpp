@@ -1,10 +1,11 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include <QFileDialog>
 #include <QDebug>
+#include <QFileDialog>
+#include <QItemSelectionModel>
+#include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlTableModel>
-#include <QSqlError>
+#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -122,6 +123,37 @@ void MainWindow::openTable() {
         return;
     }
     showRecordCount();
+
+    model->setHeaderData(model->fieldIndex("employeeNo"), Qt::Horizontal, "工号");
+    model->setHeaderData(model->fieldIndex("Name"), Qt::Horizontal, "姓名");
+    model->setHeaderData(model->fieldIndex("Gender"), Qt::Horizontal, "性别");
+    model->setHeaderData(model->fieldIndex("Birthday"), Qt::Horizontal, "出生日期");
+    model->setHeaderData(model->fieldIndex("Province"), Qt::Horizontal, "省份");
+    model->setHeaderData(model->fieldIndex("Department"), Qt::Horizontal, "部门");
+    model->setHeaderData(model->fieldIndex("Salary"), Qt::Horizontal, "工资");
+
+    model->setHeaderData(model->fieldIndex("Memo"), Qt::Horizontal, "备注");
+    model->setHeaderData(model->fieldIndex("Photo"), Qt::Horizontal, "照片");
+
+    this->selectionModel = new QItemSelectionModel(model, this);
+    connect(selectionModel,
+            &QItemSelectionModel::currentChanged,
+            this,
+            &MainWindow::do_currentChanged);
+    connect(selectionModel,
+            &QItemSelectionModel::currentRowChanged,
+            this,
+            &MainWindow::do_currentRowChanged);
+
+    ui->tableView->setModel(this->model);
+    ui->tableView->setSelectionModel(this->selectionModel);
+    ui->tableView->setColumnHidden(model->fieldIndex("Memo"), true);
+    ui->tableView->setColumnHidden(model->fieldIndex("Photo"), true);
+
+    QStringList delegateList;
+    delegateList << "男" << "女";
+    bool isEidtable = false;
+    comboBoxDelegateSex.setItems();
 }
 
 void MainWindow::getFieldNames() {

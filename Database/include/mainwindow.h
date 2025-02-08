@@ -9,7 +9,7 @@ class MainWindow;
 }
 
 class QSqlTableModel;
-class QItemSeletionModel;
+class QItemSelectionModel;
 class QDataWidgetMapper;
 class TComboBoxDelegate;
 
@@ -20,10 +20,10 @@ class MainWindow : public QMainWindow
 private:
     QSqlDatabase db;
     QSqlTableModel *model;
-    QItemSeletionModel *selectionModel;
+    QItemSelectionModel *selectionModel;
     QDataWidgetMapper *dataMapper;
-    TComboBoxDelegate *comboBoxDelegateSex;
-    TComboBoxDelegate *comboBoxDelegateDepartment;
+    TComboBoxDelegate comboBoxDelegateSex;
+    TComboBoxDelegate comboBoxDelegateDepartment;
 
     void openTable();
     void getFieldNames();
