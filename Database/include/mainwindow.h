@@ -30,6 +30,8 @@ private:
     void showRecordCount();
 
     void getDBInfo();
+    void initDB();
+    QByteArray convertPictureToBOLB(QString fileName);
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
