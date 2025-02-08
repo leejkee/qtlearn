@@ -25,13 +25,13 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 # message(STATUS "Variable name CMAKE_CURRENT_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 # message(STATUS "Variable name PROJECT_SOURECS: ${PROJECT_SOURCES}")
 
-set(INCLUDE_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/build/Database_autogen/include")
+# set(INCLUDE_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/build/Database_autogen/include")
 
 qt_add_executable(Database
     MANUAL_FINALIZATION
     ${PROJECT_SOURCES}
 )
-qt6_add_ui(Database ${INCLUDE_PREFIX} SOURCES ${UI_FILES})
+qt6_add_ui(Database SOURCES ${UI_FILES})
 
 target_link_libraries(Database PRIVATE Qt6::Widgets Qt6::Sql)
 
