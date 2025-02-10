@@ -4,3 +4,5 @@
 */uml/*.drawio
 */uml/*.bkp
 test/
+*/.idea/
+*/cmake-build-debug/
