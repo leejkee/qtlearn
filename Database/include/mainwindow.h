@@ -19,7 +19,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private:
-    QSqlDatabase db;
+    // QSqlDatabase db;
     QSqlTableModel *model;
     QItemSelectionModel *selectionModel;
     QDataWidgetMapper *dataMapper;

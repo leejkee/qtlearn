@@ -11,6 +11,7 @@
 #include <QModelIndex>
 #include <QSqlRecord>
 #include <QMessageBox>
+#include "databasemanager.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -30,17 +31,11 @@ MainWindow::~MainWindow()
 }
 void MainWindow::getDBInfo()
 {
-    if (!db.open())
-    {
-        QMessageBox::information(this, "Error", QString("Error: %1").arg(db.lastError().text()));
-        return;
-    }
     QSqlQuery query;
     query.prepare("PRAGMA table_info(employees)");
     if (!query.exec())
     {
         QMessageBox::information(this, "Error", QString("Error: %1").arg(query.lastError().text()));
-        db.close();
         return;
     }
 
@@ -55,7 +50,6 @@ void MainWindow::getDBInfo()
         info.append(QString("Column: %1, Name: %2, Type: %3, Not Null: %4, Primary Key: %5\n")
                     .arg(column).arg(name).arg(type).arg(notnull).arg(ispk));
     }
-    db.close();
     QMessageBox::information(this, "Info", info);
 }
 
@@ -74,11 +68,6 @@ QByteArray MainWindow::convertPictureToBOLB(QString fileName)
 }
 
 void MainWindow::initDB() {
-    if (!db.open())
-    {
-        QMessageBox::information(this, "Error", QString("Error: %1").arg(db.lastError().text()));
-        return;
-    }
     QSqlQuery query;
     query.prepare("INSERT INTO employees (employeeNo, Name, Gender, Birthday, Province, Department, Salary, Photo, Memo) "
                   "VALUES (?,?,?,?,?,?,?,?,?)");
@@ -113,7 +102,6 @@ void MainWindow::initDB() {
         if (!query.exec())
         {
             QMessageBox::information(this, "Error", QString("Error: %1").arg(query.lastError().text()));
-            db.close();
             return;
         }
         else
@@ -121,15 +109,9 @@ void MainWindow::initDB() {
             QMessageBox::information(this, "Info", QString("Insert Record: %1").arg(i));
         }
     }
-    db.close();
 }
 void MainWindow::openTable() {
-    if (!db.open())
-    {
-        QMessageBox::information(this, "Error", QString("Error: %1").arg(db.lastError().text()));
-        return;
-    }
-    this->model = new QSqlTableModel(this, db);
+    this->model = new QSqlTableModel(this, DatabaseManager::instance().getDB());
     model->setTable("employees");
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
     model->setSort(model->fieldIndex("employeeNo"), Qt::AscendingOrder);
@@ -211,7 +193,6 @@ void MainWindow::openTable() {
     ui->actionScan->setEnabled(true);
     ui->groupBoxSort->setEnabled(true);
     ui->groupBoxFilter->setEnabled(true);
-    // db.close();
 }
 
 void MainWindow::getFieldNames() {
@@ -267,11 +248,9 @@ void MainWindow::on_actionOpenDB_triggered()
     if (DBName.isEmpty()) {
         return;
     }
+    // ui->plainTextEdit->appendPlainText(QString("Debug Output:\nOpening DB: %1").arg(DBName));
 
-    ui->plainTextEdit->appendPlainText(QString("Debug Output:\nOpening DB: %1").arg(DBName));
-
-    this->db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(DBName);
+    DatabaseManager::instance().openDB(DBName);
     // this->initDB();
     this->openTable();
 }
