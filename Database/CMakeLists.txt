@@ -25,8 +25,6 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 # message(STATUS "Variable name CMAKE_CURRENT_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 # message(STATUS "Variable name PROJECT_SOURECS: ${PROJECT_SOURCES}")
 
-# set(INCLUDE_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/build/Database_autogen/include")
-
 qt_add_executable(Database
     MANUAL_FINALIZATION
     ${PROJECT_SOURCES}
