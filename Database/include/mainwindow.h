@@ -32,15 +32,15 @@ private:
 
     void getDBInfo();
     void initDB();
-    QByteArray convertPictureToBOLB(QString fileName);
+    QByteArray convertPictureToBOLB(const QString &fileName);
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 
 private Q_SLOTS:
-    void do_currentChanged(const QModelIndex &currnent, const QModelIndex &previous);
-    void do_currentRowChanged(const QModelIndex &currnent, const QModelIndex &previous);
+    void do_currentChanged(const QModelIndex &current, const QModelIndex &previous);
+    void do_currentRowChanged(const QModelIndex &current, const QModelIndex &previous);
 
     void on_actionOpenDB_triggered();
     void on_actionRecAppend_triggered();

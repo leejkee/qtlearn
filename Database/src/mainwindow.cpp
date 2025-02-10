@@ -42,52 +42,55 @@ void MainWindow::getDBInfo()
     QString info;
     while(query.next())
     {
-        int column = query.value(0).toInt();
-        QString name = query.value(1).toString();
-        QString type = query.value(2).toString();
-        bool notnull = query.value(3).toBool();
-        bool ispk = query.value(5).toBool();
+        const int column = query.value(0).toInt();
+        const QString name = query.value(1).toString();
+        const QString type = query.value(2).toString();
+        const bool notNull = query.value(3).toBool();
+        const bool isPK = query.value(5).toBool();
         info.append(QString("Column: %1, Name: %2, Type: %3, Not Null: %4, Primary Key: %5\n")
-                    .arg(column).arg(name).arg(type).arg(notnull).arg(ispk));
+                    .arg(column).arg(name, type).arg(notNull).arg(isPK));
     }
     QMessageBox::information(this, "Info", info);
 }
 
 // Function to convert picture to BLOB 
-QByteArray MainWindow::convertPictureToBOLB(QString fileName)
+QByteArray MainWindow::convertPictureToBOLB(const QString &fileName)
 {
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly))
     {
         QMessageBox::information(this, "Error", QString("Error: %1").arg(file.errorString()));
-        return QByteArray();
+        return {};
     }
-    QByteArray data = file.readAll();
-    file.close();
-    return data;
+    return file.readAll();
 }
 
 void MainWindow::initDB() {
     QSqlQuery query;
     query.prepare("INSERT INTO employees (employeeNo, Name, Gender, Birthday, Province, Department, Salary, Photo, Memo) "
                   "VALUES (?,?,?,?,?,?,?,?,?)");
-    QVariantList Nos = {1001, 1002, 1004, 1230, 3006, 2005, 2006, 2007};
-    QVariantList Names = {"王五", "李四", "张三", "小雅", "小芳", "小明", "马克", "美丽"};
-    QVariantList Genders = {"男", "男", "男", "女", "女", "男", "男", "女"};
-    QVariantList Birthdays = {"1987-04-24", "1990-02-03", "1992-03-04", "1992-03-18", "1998-03-10", "1992-03-13", "1999-02-18", "2001-02-20"};
-    QVariantList Provinces = {"河北", "湖南", "上海", "重庆", "湖北", "安徽", "重庆", "河南"};
-    QVariantList Departments = {"行政部", "销售部", "技术部", "技术部", "行政部", "技术部", "生产部", "行政部"};
-    QVariantList Salaries = {5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000};
-    QVariantList Photos = {convertPictureToBOLB(":/Photo/pictures/1.jpg"),
-                   convertPictureToBOLB(":/Photo/pictures/2.jpg"),
-                   convertPictureToBOLB(":/Photo/pictures/3.png"),
-                   convertPictureToBOLB(":/Photo/pictures/4.png"),
-                   convertPictureToBOLB(":/Photo/pictures/5.jpg"),
-                   convertPictureToBOLB(":/Photo/pictures/6.png"),
-                   convertPictureToBOLB(":/Photo/pictures/7.png"),
-                   convertPictureToBOLB(":/Photo/pictures/8.jpg")};
-
-    QVariantList Memos = {"111", "222", "333", "444", "555", "666", "777", "888"};
+    const QVariantList Nos = {1001, 1002, 1004, 1230, 3006, 2005, 2006, 2007};
+    const QVariantList Names = {"王五", "李四", "张三", "小雅", "小芳", "小明", "马克", "美丽"};
+    const QVariantList Genders = {"男", "男", "男", "女", "女", "男", "男", "女"};
+    const QVariantList Birthdays = {"1987-04-24", "1990-02-03", "1992-03-04", "1992-03-18", "1998-03-10", "1992-03-13", "1999-02-18", "2001-02-20"};
+    const QVariantList Provinces = {"河北", "湖南", "上海", "重庆", "湖北", "安徽", "重庆", "河南"};
+    const QVariantList Departments = {"行政部", "销售部", "技术部", "技术部", "行政部", "技术部", "生产部", "行政部"};
+    const QVariantList Salaries = {5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000};
+    const QStringList imagePaths = {
+        ":/Photo/pictures/1.jpg",
+        ":/Photo/pictures/2.jpg",
+        ":/Photo/pictures/3.png",
+        ":/Photo/pictures/4.png",
+        ":/Photo/pictures/5.jpg",
+        ":/Photo/pictures/6.png",
+        ":/Photo/pictures/7.png",
+        ":/Photo/pictures/8.jpg"
+    };
+    QVariantList Photos;
+    for (auto &imagePath : imagePaths) {
+        Photos.append(convertPictureToBOLB(imagePath));
+    }
+    const QVariantList Memos = {"111", "222", "333", "444", "555", "666", "777", "888"};
     for (int i = 0; i < Nos.size(); i++)
     {
         query.bindValue(0, Nos.at(i));
@@ -150,14 +153,14 @@ void MainWindow::openTable() {
 
     QStringList delegateList;
     delegateList << "男" << "女";
-    bool isEidtable = false;
-    comboBoxDelegateSex.setItems(delegateList, isEidtable);
+    bool isEditable = false;
+    comboBoxDelegateSex.setItems(delegateList, isEditable);
     ui->tableView->setItemDelegateForColumn(model->fieldIndex("Gender"), &comboBoxDelegateSex);
 
     delegateList.clear();
     delegateList << "销售部" << "技术部" << "生产部" << "行政部";
-    isEidtable = true;
-    comboBoxDelegateDepartment.setItems(delegateList, isEidtable);
+    isEditable = true;
+    comboBoxDelegateDepartment.setItems(delegateList, isEditable);
     ui->tableView->setItemDelegateForColumn(model->fieldIndex("Department"), &comboBoxDelegateDepartment);
 
     dataMapper = new QDataWidgetMapper(this);
@@ -196,14 +199,14 @@ void MainWindow::openTable() {
 }
 
 void MainWindow::getFieldNames() {
-    QSqlRecord record = model->record();
+    const QSqlRecord record = model->record();
     for (int i = 0; i < record.count(); i++)
     {
         ui->comboBoxSortField->addItem(record.fieldName(i));
     }
 }
 
-void MainWindow::showRecordCount() {
+void MainWindow::showRecordCount(){
     ui->statusbar->showMessage(QString("Total: %1 records").arg(model->rowCount()));
 }
 
@@ -227,15 +230,14 @@ void MainWindow::do_currentRowChanged(const QModelIndex &current, const QModelIn
     }
 
     dataMapper->setCurrentIndex(current.row());
-    int currentRow = current.row();
-    QSqlRecord record = model->record(currentRow);
-    if (record.isNull("Photo"))
+    const int currentRow = current.row();
+    if (const QSqlRecord record = model->record(currentRow); record.isNull("Photo"))
     {
         ui->labelPhoto->clear();
     }
     else
     {
-        QByteArray data = record.value("Photo").toByteArray();
+        const QByteArray data = record.value("Photo").toByteArray();
         QPixmap pixmap;
         pixmap.loadFromData(data);
         ui->labelPhoto->setPixmap(pixmap.scaled(ui->labelPhoto->size(), Qt::KeepAspectRatio));
@@ -244,7 +246,7 @@ void MainWindow::do_currentRowChanged(const QModelIndex &current, const QModelIn
 
 void MainWindow::on_actionOpenDB_triggered()
 {
-    QString DBName = QFileDialog::getOpenFileName(this, tr("Open DB"), "", tr("DB Files (*.db)"));
+    const QString DBName = QFileDialog::getOpenFileName(this, tr("Open DB"), "", tr("DB Files (*.db)"));
     if (DBName.isEmpty()) {
         return;
     }
@@ -255,32 +257,29 @@ void MainWindow::on_actionOpenDB_triggered()
     this->openTable();
 }
 
-void MainWindow::on_actionRecAppend_triggered()
-{
+void MainWindow::on_actionRecAppend_triggered(){
     QSqlRecord record = model->record();
     record.setValue(model->fieldIndex("employeeNo"), 2000+model->rowCount());
     record.setValue(model->fieldIndex("Gender"), "男");
     model->insertRecord(model->rowCount(), record);
 
     selectionModel->clearSelection();
-    QModelIndex currentIndex = model->index(model->rowCount()-1, 1);
+    const QModelIndex currentIndex = model->index(model->rowCount()-1, 1);
     selectionModel->setCurrentIndex(currentIndex, QItemSelectionModel::Select);
     showRecordCount();
 }
 
-void MainWindow::on_actionRecInsert_triggered()
-{
-    QModelIndex currentIndex = ui->tableView->currentIndex();
-    QSqlRecord record = model->record();
+void MainWindow::on_actionRecInsert_triggered(){
+    const QModelIndex currentIndex = ui->tableView->currentIndex();
+    const QSqlRecord record = model->record();
     model->insertRecord(currentIndex.row(), record);
     selectionModel->clearSelection();
     selectionModel->setCurrentIndex(currentIndex, QItemSelectionModel::Select);
     showRecordCount();
 }
 
-void MainWindow::on_actionRecDelete_triggered()
-{
-    QModelIndex currentIndex = ui->tableView->currentIndex();
+void MainWindow::on_actionRecDelete_triggered() {
+    const QModelIndex currentIndex = ui->tableView->currentIndex();
     model->removeRow(currentIndex.row());
     showRecordCount();
 }
@@ -300,8 +299,7 @@ void MainWindow::on_actionRecDelete_triggered()
 // }
 void MainWindow::on_actionSubmit_triggered()
 {
-    bool yes = model->submitAll();
-    if (!yes) // submit successfully
+    if (const bool yes = model->submitAll(); !yes) // submit successfully
     {
         QMessageBox::information(this, "Error", "ERROR" + model->lastError().text());
     }
@@ -312,8 +310,7 @@ void MainWindow::on_actionSubmit_triggered()
     }
     showRecordCount();
 }
-void MainWindow::on_actionRevert_triggered()
-{
+void MainWindow::on_actionRevert_triggered() {
     model->revertAll();
     ui->actionSubmit->setEnabled(false);
     ui->actionRevert->setEnabled(false);
@@ -322,22 +319,21 @@ void MainWindow::on_actionRevert_triggered()
 
 void MainWindow::on_actionPhoto_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open Photo"), "", tr("Photo Files (*.jpg *.png)"));
+    const QString fileName = QFileDialog::getOpenFileName(this, tr("Open Photo"), "", tr("Photo Files (*.jpg *.png)"));
     if (fileName.isEmpty())
     {
         return;
     }
     QByteArray data = convertPictureToBOLB(fileName);
-    auto indexR = ui->tableView->currentIndex().row();
-    auto indexC = model->fieldIndex("Photo");
+    const auto indexR = ui->tableView->currentIndex().row();
+    const auto indexC = model->fieldIndex("Photo");
     model->setData(model->index(indexR, indexC), data);
     ui->labelPhoto->setPixmap(QPixmap(fileName).scaled(ui->labelPhoto->size(), Qt::KeepAspectRatio));
 }
 
-void MainWindow::on_actionPhotoClear_triggered()
-{
-    auto indexR = ui->tableView->currentIndex().row();
-    auto indexC = model->fieldIndex("Photo");
+void MainWindow::on_actionPhotoClear_triggered(){
+    const auto indexR = ui->tableView->currentIndex().row();
+    const auto indexC = model->fieldIndex("Photo");
     model->setData(model->index(indexR, indexC), QVariant());
     ui->labelPhoto->clear();
 }
