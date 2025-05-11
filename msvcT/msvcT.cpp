@@ -18,7 +18,9 @@ TestWidget::TestWidget(QWidget* parent) : QWidget(parent)
 	m_label->setText("Hello, World!");
 	m_label->setFixedSize(this->size());
     
-    QPixmap pixmap(QRC::LOGO_IMG); 
+    // QPixmap pixmap(QRC::LOGO_IMG); 
+     QPixmap pixmap(":/logo");
+
     m_label->setPixmap(pixmap);
     m_label->setScaledContents(true);
     m_label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
