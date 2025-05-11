@@ -1,5 +1,7 @@
 */build/
 */.vscode/
+*/.vs/
+*/out/
 */CMakeLists.txt.user
 */uml/*.drawio
 */uml/*.bkp
